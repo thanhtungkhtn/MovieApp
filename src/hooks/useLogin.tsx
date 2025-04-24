@@ -26,16 +26,24 @@ export function useLogin() {
       password: '',
     },
   });
+
+  
   const handleLogin = async (loginForm: LoginForm) => {
     try {
       const token = await getRequestToken();
-      await AsyncStorage.setItem('requestToken', token);
-      const validatedToken = await validateLogin(
+      const param: type = {
         loginForm.username,
         loginForm.password,
         token
       );
+      }
+      const validatedToken = await validateLogin(
+        param
+
+      );
       const sessionId = await getSessionId(validatedToken);
+      await AsyncStorage.setItem('requestToken', token);
+
       login(sessionId);
       showToast(Status.success, 'Login success');
       navigation.goBack();
@@ -47,6 +55,7 @@ export function useLogin() {
   useEffect(() => {
     return () => {
       reset({
+        // break by func
         username: '',
         password: '',
       });

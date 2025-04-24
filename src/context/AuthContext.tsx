@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getAccountDetail } from "@/services/user.services";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+type User = {
+  id: number;
+  username: string;
+  name: string;
+};
 export type AuthContextType = {
   sessionId: string;
-  user: {
-    id: number;
-    username: string;
-    name: string;
-  } | null;
+  user: User | undefined
   login: (sessionId: string) => void;
   logout: () => void;
 };
@@ -18,15 +19,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [sessionId, setSessionId] = useState<string>("");
   const [user, setUser] = useState<AuthContextType["user"]>(null);
 
-  const login = async (sessionId: string) => {
-    setSessionId(sessionId);
+  const getAccountDetail = async (sessionId: string) => {
+    setloading(true)
+
     await AsyncStorage.setItem("sessionId", sessionId);
     const account = await getAccountDetail(sessionId);
-    setUser({
-      id: account.id,
-      username: account.username,
-      name: account.name,
-    });
+    AsyncStorage.setItem
+    // setUser({
+    //   id: account.id,
+    //   username: account.username,
+    //   name: account.name,
+    // });
     await AsyncStorage.setItem("user", JSON.stringify(account));
   };
 
@@ -38,20 +41,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const loadSession = async () => {
-      const storedSessionId = await AsyncStorage.getItem("sessionId");
-      if (storedSessionId) {
-        setSessionId(storedSessionId);
-        try {
-          const userInfoString = await AsyncStorage.getItem("user");
-
-          if (userInfoString) {
-            const userInfo = JSON.parse(userInfoString);
-            setUser(userInfo);
-          }
-        } catch (err) {
-          console.warn("Failed to fetch user info");
-        }
-      }
+      token
+      getAccountDetail => resdux
+      catch => expired token
     };
     loadSession();
   }, []);

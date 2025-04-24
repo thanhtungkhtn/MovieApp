@@ -11,9 +11,9 @@ export const setToastRef = (ref: ToastController) => {
 };
 
 export const showToast = (status: Status, message: string) => {
-  if (toastControllerRef) {
-    toastControllerRef.showToast(status, message);
-  } else {
+  if (!toastControllerRef) {
     console.warn('Toast ref is not set');
-  }
+    return
+  } 
+  toastControllerRef.showToast(status, message);
 };
